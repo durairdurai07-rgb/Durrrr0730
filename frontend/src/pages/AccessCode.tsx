@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/auth";
 import { 
-  Lock, Unlock, Eye, EyeOff, Fingerprint, Sparkles, CheckCircle2, 
+  Lock, Unlock, Eye, EyeOff, Sparkles, CheckCircle2, 
   Calendar, Target, BrainCircuit, ArrowRight, Clock, ChevronRight,
   Code2, BarChart3, LayoutGrid, CheckSquare, Layers, Shield
 } from "lucide-react";

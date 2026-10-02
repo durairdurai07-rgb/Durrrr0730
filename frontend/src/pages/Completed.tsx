@@ -4,7 +4,6 @@ import { useReopenTask, useTasks } from "@/api/tasks";
 import { ErrorBox, PageSkeleton } from "@/components/ui";
 import { useAuth } from "@/contexts/auth";
 import { useUi } from "@/contexts/ui";
-import { fmtDate } from "@/lib/dates";
 import { partition } from "@/lib/selectors";
 import { label } from "@/types";
 

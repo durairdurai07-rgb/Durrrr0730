@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Bell, BarChart3, CalendarClock, CheckCircle2, ChevronsLeft, ChevronsRight, Crown, LayoutDashboard, ListTodo, LogOut, Monitor, Moon, Plus, Search, Sparkles, Sun, Sunrise, Zap } from "lucide-react";
+import { Bell, BarChart3, CalendarClock, CheckCircle2, ChevronsLeft, ChevronsRight, Crown, LayoutDashboard, ListTodo, LogOut, Monitor, Moon, Plus, Search, Sparkles, Sun, Sunrise } from "lucide-react";
 import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import { useUi } from "@/contexts/ui";

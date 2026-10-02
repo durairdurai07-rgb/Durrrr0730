@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { useTasks } from "@/api/tasks";
-import { ErrorBox, PageHeader, PageSkeleton, Section, TaskSection, Empty } from "@/components/ui";
+import { ErrorBox, PageSkeleton, TaskSection, Empty } from "@/components/ui";
 import { TaskList } from "@/components/TaskRow";
 import { useAuth } from "@/contexts/auth";
-import { useUi } from "@/contexts/ui";
 import { partition } from "@/lib/selectors";
 import { wallNow } from "@/lib/dates";
-import { CheckCircle2, Clock, Calendar, CheckCircle, Sparkles, Filter, ChevronLeft, ChevronRight, Rocket } from "lucide-react";
-import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { CheckCircle2, Clock, Calendar, CheckCircle, Filter, ChevronLeft, ChevronRight, Rocket } from "lucide-react";
+import { LineChart, Line, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
-  const { user } = useAuth(), ui = useUi(), q = useTasks();
+  const { user } = useAuth(), q = useTasks();
   const [focusFilter, setFocusFilter] = useState("All");
 
   if (q.isLoading) return <PageSkeleton />;
@@ -151,7 +150,7 @@ export default function Dashboard() {
             {p.upcoming.length ? <TaskList tasks={p.upcoming.slice(0, 5)} /> : <div className="py-8"><Empty title="No upcoming deadlines" hint="Add a task with a date to see it here." /></div>}
           </div>
 
-          <MiniCalendar tz={tz} />
+          <MiniCalendar />
 
           <div className="card !bg-[#12141F] border-purple-500/20 p-6 flex items-center gap-6 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -169,7 +168,7 @@ export default function Dashboard() {
   );
 }
 
-function MiniCalendar({ tz }: { tz: string }) {
+function MiniCalendar() {
   const [offsetDays, setOffsetDays] = useState(0);
   
   const today = new Date();

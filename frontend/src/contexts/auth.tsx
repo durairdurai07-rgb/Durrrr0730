@@ -20,8 +20,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     email: "workspace@local.com",
     avatar_url: null,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
   };
 
   const clear = useCallback(() => { 
