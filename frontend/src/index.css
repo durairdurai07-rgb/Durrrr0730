@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Ultra-Premium Violet/Navy Dark Theme */
+  --bg: #090B14; 
+  --surface: #12141F; 
+  --surface2: #1A1C29; 
+  --ink: #FFFFFF; 
+  --muted: #8E95A9; 
+  --line: rgba(255, 255, 255, 0.06);
+  --accent: #6C5CE7; 
+  --accent-soft: rgba(108, 92, 231, 0.15); 
+  --accent-on: #FFFFFF; 
+  --crit: #FF4757; 
+  --high: #FFA502; 
+  --med: #FDCB6E; 
+}
+
+/* Force dark mode variables everywhere */
+:root[data-theme="light"], :root[data-theme="dark"], @media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #090B14; --surface: #12141F; --surface2: #1A1C29;
+    --ink: #FFFFFF; --muted: #8E95A9; --line: rgba(255, 255, 255, 0.06);
+    --accent: #6C5CE7; --accent-soft: rgba(108, 92, 231, 0.15); --accent-on: #FFFFFF;
+    --crit: #FF4757; --high: #FFA502; --med: #FDCB6E;
+  }
+}
+
+@layer base {
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body { 
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-top: env(safe-area-inset-top, 0px);
+    background-color: var(--bg);
+  }
+  * { border-color: var(--line); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+
+@layer components {
+  .card { @apply rounded-2xl border border-line bg-surface p-5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-xl transition-all duration-300; }
+  .btn { @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 font-bold text-accenton shadow-lg shadow-cyan-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] hover:shadow-cyan-500/40 disabled:opacity-60 disabled:hover:scale-100; }
+  .btn-ghost { @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-line bg-white/5 px-4 py-2 text-ink backdrop-blur-md transition-all hover:bg-white/10 disabled:opacity-60; }
+  .btn-danger { @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-4 py-2 font-bold text-white shadow-lg shadow-rose-500/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60; }
+  .input { @apply w-full rounded-xl border border-line bg-black/20 backdrop-blur-md px-4 py-2.5 text-ink placeholder:text-muted focus:border-cyan-500/50 focus:bg-black/40 transition-all; }
+  .label { @apply grid gap-1.5 text-xs font-semibold tracking-wide text-muted uppercase; }
+  .skel { @apply animate-pulse rounded-xl bg-surface2 backdrop-blur-sm; }
+}
+
+@keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+.pop { animation: pop 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
