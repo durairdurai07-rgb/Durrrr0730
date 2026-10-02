@@ -4,7 +4,6 @@ import { Bell, BarChart3, CalendarClock, CheckCircle2, ChevronsLeft, ChevronsRig
 import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import { useUi } from "@/contexts/ui";
-import { toast } from "@/lib/toast";
 import { MonthlyCalendar } from "@/components/MonthlyCalendar";
 
 const NAV = [
