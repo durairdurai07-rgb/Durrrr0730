@@ -4,6 +4,7 @@ import { Bell, BarChart3, CalendarClock, CheckCircle2, ChevronsLeft, ChevronsRig
 import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import { useUi } from "@/contexts/ui";
+import { toast } from "@/lib/toast";
 
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -86,17 +87,35 @@ export default function AppLayout() {
           </form>
           
           <div className="flex items-center gap-2 ml-auto">
-            <span className="hidden text-muted lg:block text-sm font-medium mr-4 flex items-center gap-2"><CalendarClock size={16} />{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}</span>
+            <span 
+              className="hidden text-muted lg:block text-sm font-medium mr-4 flex items-center gap-2 cursor-pointer hover:text-white transition-colors"
+              onClick={() => nav("/today")}
+              title="Go to Today"
+            >
+              <CalendarClock size={16} />{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}
+            </span>
             <button className="btn-ghost md:hidden" onClick={cycle} aria-label="Change theme"><ThemeIcon size={16} /></button>
             <button className="btn hidden md:inline-flex !bg-gradient-to-r !from-indigo-600 !to-purple-600 !shadow-purple-500/25" onClick={() => ui.openNew()} title="Shortcut: N"><Plus size={16} />Add task</button>
-            <button className="w-10 h-10 rounded-full flex items-center justify-center text-muted hover:bg-surface2 transition-colors relative ml-2">
+            <button 
+              className="w-10 h-10 rounded-full flex items-center justify-center text-muted hover:bg-surface2 transition-colors relative ml-2"
+              onClick={() => toast("No new notifications")}
+              title="Notifications"
+            >
               <Bell size={18} />
               <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-500"></span>
             </button>
-            <button className="w-10 h-10 rounded-full flex items-center justify-center text-muted hover:bg-surface2 transition-colors">
+            <button 
+              className="w-10 h-10 rounded-full flex items-center justify-center text-muted hover:bg-surface2 transition-colors"
+              onClick={() => toast("Statistics view coming soon!")}
+              title="Statistics"
+            >
               <BarChart3 size={18} />
             </button>
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-emerald-400 p-0.5 ml-2 cursor-pointer border-2 border-surface">
+            <div 
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-emerald-400 p-0.5 ml-2 cursor-pointer border-2 border-surface hover:scale-105 transition-transform"
+              onClick={() => toast("Profile settings coming soon!")}
+              title="Profile"
+            >
               <div className="w-full h-full rounded-full bg-surface2 overflow-hidden">
                 <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${user?.name || "User"}&backgroundColor=transparent`} alt="Avatar" className="w-full h-full object-cover" />
               </div>
