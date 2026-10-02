@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/auth";
 import { useTheme } from "@/contexts/theme";
 import { useUi } from "@/contexts/ui";
 import { toast } from "@/lib/toast";
+import { MonthlyCalendar } from "@/components/MonthlyCalendar";
 
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -18,6 +19,7 @@ export default function AppLayout() {
   const { user, logout } = useAuth(), { theme, cycle } = useTheme(), ui = useUi(), nav = useNavigate();
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem("myday.collapsed") === "1");
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const search = useRef<HTMLInputElement>(null);
   useEffect(() => { localStorage.setItem("myday.collapsed", collapsed ? "1" : "0"); }, [collapsed]);
   useEffect(() => {
@@ -94,8 +96,8 @@ export default function AppLayout() {
             
             <span 
               className="hidden text-muted lg:block text-sm font-medium mr-4 flex items-center gap-2 cursor-pointer hover:text-white transition-colors relative z-50"
-              onClick={() => nav("/today")}
-              title="Go to Today"
+              onClick={() => setCalendarOpen(true)}
+              title="Open Calendar"
             >
               <CalendarClock size={16} />{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}
             </span>
@@ -167,6 +169,8 @@ export default function AppLayout() {
         {NAV.slice(3, 5).map(({ to, label, icon: Icon }) => <NavLink key={to} to={to} className={link(true)}><Icon size={20} />{label}</NavLink>)}
         <button className="flex flex-1 flex-col items-center gap-0.5 rounded-lg px-2.5 py-2 text-[11px] text-muted" onClick={() => { logout(); nav("/access"); }}><LogOut size={20} />Lock</button>
       </nav>
+
+      {calendarOpen && <MonthlyCalendar onClose={() => setCalendarOpen(false)} />}
     </div>
   );
 }
