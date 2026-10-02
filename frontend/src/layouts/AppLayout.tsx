@@ -17,6 +17,7 @@ const NAV = [
 export default function AppLayout() {
   const { user, logout } = useAuth(), { theme, cycle } = useTheme(), ui = useUi(), nav = useNavigate();
   const [collapsed, setCollapsed] = useState(() => localStorage.getItem("myday.collapsed") === "1");
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const search = useRef<HTMLInputElement>(null);
   useEffect(() => { localStorage.setItem("myday.collapsed", collapsed ? "1" : "0"); }, [collapsed]);
   useEffect(() => {
@@ -87,38 +88,74 @@ export default function AppLayout() {
           </form>
           
           <div className="flex items-center gap-2 ml-auto">
+            {activeDropdown && (
+              <div className="fixed inset-0 z-40" onClick={() => setActiveDropdown(null)}></div>
+            )}
+            
             <span 
-              className="hidden text-muted lg:block text-sm font-medium mr-4 flex items-center gap-2 cursor-pointer hover:text-white transition-colors"
+              className="hidden text-muted lg:block text-sm font-medium mr-4 flex items-center gap-2 cursor-pointer hover:text-white transition-colors relative z-50"
               onClick={() => nav("/today")}
               title="Go to Today"
             >
               <CalendarClock size={16} />{new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" })}
             </span>
-            <button className="btn-ghost md:hidden" onClick={cycle} aria-label="Change theme"><ThemeIcon size={16} /></button>
-            <button className="btn hidden md:inline-flex !bg-gradient-to-r !from-indigo-600 !to-purple-600 !shadow-purple-500/25" onClick={() => ui.openNew()} title="Shortcut: N"><Plus size={16} />Add task</button>
-            <button 
-              className="w-10 h-10 rounded-full flex items-center justify-center text-muted hover:bg-surface2 transition-colors relative ml-2"
-              onClick={() => toast("No new notifications")}
-              title="Notifications"
-            >
-              <Bell size={18} />
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-500"></span>
-            </button>
-            <button 
-              className="w-10 h-10 rounded-full flex items-center justify-center text-muted hover:bg-surface2 transition-colors"
-              onClick={() => toast("Statistics view coming soon!")}
-              title="Statistics"
-            >
-              <BarChart3 size={18} />
-            </button>
-            <div 
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-emerald-400 p-0.5 ml-2 cursor-pointer border-2 border-surface hover:scale-105 transition-transform"
-              onClick={() => toast("Profile settings coming soon!")}
-              title="Profile"
-            >
-              <div className="w-full h-full rounded-full bg-surface2 overflow-hidden">
-                <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${user?.name || "User"}&backgroundColor=transparent`} alt="Avatar" className="w-full h-full object-cover" />
+            <button className="btn-ghost md:hidden relative z-50" onClick={cycle} aria-label="Change theme"><ThemeIcon size={16} /></button>
+            <button className="btn hidden md:inline-flex !bg-gradient-to-r !from-indigo-600 !to-purple-600 !shadow-purple-500/25 relative z-50" onClick={() => ui.openNew()} title="Shortcut: N"><Plus size={16} />Add task</button>
+            
+            <div className="relative z-50">
+              <button 
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors relative ml-2 ${activeDropdown === 'notif' ? 'bg-surface2 text-white' : 'text-muted hover:bg-surface2'}`}
+                onClick={() => setActiveDropdown(activeDropdown === 'notif' ? null : 'notif')}
+                title="Notifications"
+              >
+                <Bell size={18} />
+                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-500"></span>
+              </button>
+              {activeDropdown === 'notif' && (
+                <div className="absolute right-0 top-full mt-2 w-72 bg-[#151722] border border-line rounded-xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="p-3 border-b border-line font-semibold text-sm text-white">Notifications</div>
+                  <div className="p-8 flex flex-col items-center justify-center text-center text-sm text-muted">
+                    <Bell size={32} className="mb-3 text-muted/30" />
+                    <p>You have no new notifications.</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="relative z-50">
+              <button 
+                className="w-10 h-10 rounded-full flex items-center justify-center text-muted hover:bg-surface2 transition-colors"
+                onClick={() => nav("/")}
+                title="Statistics Dashboard"
+              >
+                <BarChart3 size={18} />
+              </button>
+            </div>
+
+            <div className="relative z-50">
+              <div 
+                className={`w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-emerald-400 p-0.5 ml-2 cursor-pointer border-2 hover:scale-105 transition-all ${activeDropdown === 'profile' ? 'border-purple-500 shadow-lg shadow-purple-500/20' : 'border-surface'}`}
+                onClick={() => setActiveDropdown(activeDropdown === 'profile' ? null : 'profile')}
+                title="Profile Settings"
+              >
+                <div className="w-full h-full rounded-full bg-surface2 overflow-hidden">
+                  <img src={`https://api.dicebear.com/7.x/notionists/svg?seed=${user?.name || "User"}&backgroundColor=transparent`} alt="Avatar" className="w-full h-full object-cover" />
+                </div>
               </div>
+              {activeDropdown === 'profile' && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-[#151722] border border-line rounded-xl shadow-2xl overflow-hidden py-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="px-4 py-3 border-b border-line mb-1 bg-[#1A1C29]">
+                    <div className="text-sm font-bold text-white truncate">{user?.name || "Workspace"}</div>
+                    <div className="text-[11px] text-muted truncate mt-0.5">{user?.email || "user@example.com"}</div>
+                  </div>
+                  <button className="w-full text-left px-4 py-2.5 text-sm text-muted hover:bg-surface2 hover:text-white transition-colors flex items-center gap-2" onClick={() => { cycle(); setActiveDropdown(null); }}>
+                    <ThemeIcon size={14} /> Toggle Theme
+                  </button>
+                  <button className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors flex items-center gap-2" onClick={() => { logout(); nav("/access"); }}>
+                    <LogOut size={14} /> Log out
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
