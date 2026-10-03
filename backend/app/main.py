@@ -12,6 +12,11 @@ app.add_middleware(
 )
 app.include_router(tasks.router)
 
+@app.get("/")
+def read_root():
+    return {"status": "ok", "message": "MY DAY API is running. The database connection is successful!"}
+
+
 
 @app.exception_handler(Exception)
 async def unhandled(_: Request, __: Exception):
